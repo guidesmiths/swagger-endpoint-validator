@@ -28,4 +28,15 @@ describe('validator', () => {
 		});
 		app.invoke('get', '/test-valid-output', req, res);
 	});
+	it.only('should return an object with \'valid: true\' when the input includes a valid query param', done => {
+		const req = app.makeRequest();
+		const res = app.makeResponse((err, sideEffects) => {
+			if (sideEffects.json) {
+				expect(sideEffects.status).toEqual(200);
+				expect(sideEffects.json).toHaveProperty('valid', true);
+				done();
+			}
+		});
+		app.invoke('get', '/test-valid-input-query?name=this-is-a-name', req, res);
+	});
 });

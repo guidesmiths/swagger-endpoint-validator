@@ -149,4 +149,35 @@ app.get('/test-valid-output', (req, res) => {
 	}
 });
 
+/**
+ * @swagger
+ * /test-valid-input-query:
+ *   get:
+ *     description: Test GET /test-valid-input-query
+ *     tags: [Test]
+ * 	   parameters:
+ *       - name: name
+ *         in: query
+ *         type: string
+ *         required: true
+ *         description: Just a name
+ * 	   produces:
+ *       - application/json
+ * 	   responses:
+ *       200:
+ *         description: successful operation
+ *         schema:
+ *           $ref: '#/definitions/Output'
+ */
+
+app.get('/test-valid-input-query', (req, res) => {
+	try {
+		const result = validator.validateAPIInput({}, req);
+		res.status(200).json(result);
+	} catch (error) {
+		res.status(404).json({ error });
+	}
+});
+
+
 module.exports = app;
