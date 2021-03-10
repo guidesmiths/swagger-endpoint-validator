@@ -1,6 +1,6 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 
+const config = require('./config');
 const validator = require('../..');
 
 const pets = [
@@ -23,39 +23,10 @@ const wrongPets = [
 
 const runServer = async () => {
 	const app = express();
-	app.use(bodyParser.urlencoded({ extended: true }));
-	app.use(bodyParser.json());
+	app.use(express.urlencoded());
+	app.use(express.json());
 
-	await validator.init(app, {
-		validationEndpoint: '/test',
-		apiDocEndpoint: '/docs',
-		format: 'jsdoc',
-		jsdoc: {
-			info: {
-				description: 'Documentation for API',
-				title: 'API Title',
-				version: '1.0.0',
-				license: {
-					name: 'MIT',
-				},
-				contact: {
-					name: 'Author',
-					email: 'email@email.com',
-				},
-			},
-			servers: [],
-			security: {
-				JWT: {
-					type: 'apiKey',
-					in: 'header',
-					name: 'Authorization',
-				},
-			},
-			baseDir: __dirname,
-			swaggerUIPath: '/docs/api',
-			filesPattern: './fake-server.js',
-		},
-	});
+	await validator.init(app, config(__dirname));
 
 	/**
 	 * @typedef {object} Pet
